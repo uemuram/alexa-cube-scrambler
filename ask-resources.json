@@ -15,7 +15,7 @@
           "runtime": "nodejs10.x",
           "handler": "index.handler",
           "templatePath": ".\\infrastructure\\cfn-deployer\\skill-stack.yaml",
-          "awsRegion": "us-east-1"
+          "awsRegion": "ap-northeast-1"
         },
         "type": "@ask-cli/cfn-deployer"
       }

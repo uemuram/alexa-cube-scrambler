@@ -2,7 +2,7 @@
   "manifest": {
     "publishingInformation": {
       "locales": {
-        "en-US": {
+        "ja-JP": {
           "summary": "Sample Short Description",
           "examplePhrases": [
             "Alexa open hello world",
@@ -19,7 +19,11 @@
       "distributionCountries": []
     },
     "apis": {
-      "custom": {}
+      "custom": {
+        "endpoint": {
+          "uri": "arn:aws:lambda:ap-northeast-1:704229799072:function:ask-cube-scrambler-default-skil-AlexaSkillFunction-BZWKK3KAEUKF"
+        }
+      }
     },
     "manifestVersion": "1.0"
   }

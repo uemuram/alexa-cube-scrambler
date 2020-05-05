@@ -1,4 +1,4 @@
 node_modules/
 package-lock.json
 .DS_Store
-.ask/ask-states.json
+.ask/*
