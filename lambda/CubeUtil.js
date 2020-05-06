@@ -1,6 +1,7 @@
 const Speech = require('ssml-builder');
 
 class CubeUtil {
+
     // スクランブルの文字列をssmlに変換する
     scrambleStr2ssml(str) {
         let speechStr = str
@@ -9,40 +10,9 @@ class CubeUtil {
             .replace(/2/g, "ツー")
             .replace(/'/g, "ダッシュ")
             .replace(/ /g, ",");
-
         let speech = new Speech()
-            .prosody({ rate: "fast" }, speechStr);
-
+            .prosody({ rate: "medium" }, speechStr);
         return speech.ssml();
-
-        // let rotationSymbols = str.split(" ");
-        // let speech = new Speech();
-        // for (let i = 0; i < rotationSymbols.length; i++) {
-        //     speech = speech.prosody(
-        //         { rate: "medium" },
-        //         rotationSymbols[i]
-        //             .replace("2", "ツー")
-        //             .replace("'", "ダッシュ")
-        //             .replace("F", "エフ")
-        //     );
-        //     speech = speech.pause('0ms');
-        // }
-        // return speech.ssml();
-
-
-        // let rotationSymbols = str.split(" ");
-        // let speech = new Speech();
-        // for (let i = 0; i < rotationSymbols.length; i++) {
-        //     speech = speech.prosody(
-        //         { rate: "medium" },
-        //         rotationSymbols[i]
-        //             .replace("2", "ツー")
-        //             .replace("'", "ダッシュ")
-        //             .replace("F", "エフ")
-        //     );
-        //     speech = speech.pause('0ms');
-        // }
-        // return speech.ssml();
     }
 
     // 3x3x3のスクランブルを生成

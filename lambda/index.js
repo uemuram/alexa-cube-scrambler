@@ -26,22 +26,8 @@ const HelloWorldIntentHandler = {
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'HelloWorldIntent';
     },
     handle(handlerInput) {
-        //const speakOutput = 'Hello World!';
-        const speakOutput = 'sss';
-
         try {
-            //        response.outputSpeech.ssml = '<speak>ぬるぽ</speak>'
-            // TODO pauseを使って間隔調整するほうがいいのかも。
-            // const speech = new Speech()
-            //     .prosody({ rate: "fast" }, "B Dダッシュ Rツー Dダッシュ")
-            //     .pause('1s')
-            //     .prosody({ rate: "medium" }, "B Dダッシュ Rツー Dダッシュ")
-            //     .pause('1s')
-            //     .prosody({ rate: "slow" }, "B Dダッシュ Rツー Dダッシュ")
-            //     .ssml();
-
             let scramble = cubeUtil.generate3x3x3Scramble(18);
-            //let scramble = "R B R2 U B2 F U2 F R2 D' R' D U2 R2 D2 B U2 R2";
             console.log(scramble);
             let speech = cubeUtil.scrambleStr2ssml(scramble);
             console.log(speech);
@@ -53,12 +39,8 @@ const HelloWorldIntentHandler = {
         } catch (e) {
             console.log(e);
         }
-
-
     }
 };
-
-
 
 const HelpIntentHandler = {
     canHandle(handlerInput) {
