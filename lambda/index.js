@@ -2,13 +2,14 @@
 // Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
 // session persistence, api calls, and more.
 const Alexa = require('ask-sdk-core');
+const Speech = require('ssml-builder');
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speakOutput = 'Welcome, you can say Hello or Help. Which would you like to try?';
+        const speakOutput = "ようこそ。";
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .reprompt(speakOutput)
@@ -21,11 +22,46 @@ const HelloWorldIntentHandler = {
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'HelloWorldIntent';
     },
     handle(handlerInput) {
-        const speakOutput = 'Hello World!';
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-            .getResponse();
+        //const speakOutput = 'Hello World!';
+        const speakOutput = 'sss';
+        // return handlerInput.responseBuilder
+        //     .speak(speakOutput)
+        //     .withSimpleCard("B D' R2 D' R2 B2 L' F R' U R' B2 U L2 F2 D2 F2 B2 D' R2")
+        //     //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+        //     .getResponse();
+        // let response = handlerInput.responseBuilder
+        //     .speak(speakOutput)
+        //     .withSimpleCard("B D' R2 D' R2 B2 L' F R' U R' B2 U L2 F2 D2 F2 B2 D' R2")
+        //     //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+        //     .getResponse();
+
+        try {
+            console.log("x");
+
+            //        response.outputSpeech.ssml = '<speak>ぬるぽ</speak>'
+            // TODO pauseを使って間隔調整するほうがいいのかも。
+            const speech = new Speech()
+                .prosody({ rate: "fast" }, "B Dダッシュ Rツー Dダッシュ")
+                .pause('1s')
+                .prosody({ rate: "medium" }, "B Dダッシュ Rツー Dダッシュ")
+                .pause('1s')
+                .prosody({ rate: "slow" }, "B Dダッシュ Rツー Dダッシュ")
+                .ssml();
+            console.log(speech);
+
+            // response.outputSpeech.ssml = speech;
+
+            return handlerInput.responseBuilder
+                .speak(speech)
+                .withSimpleCard("B D' R2 D' R2 B2 L' F R' U R' B2 U L2 F2 D2 F2 B2 D' R2")
+                //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+                .getResponse();
+
+        } catch (e) {
+            console.log(e);
+        }
+
+
     }
 };
 const HelpIntentHandler = {
@@ -113,8 +149,8 @@ exports.handler = Alexa.SkillBuilders.custom()
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
         IntentReflectorHandler, // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
-        ) 
+    )
     .addErrorHandlers(
         ErrorHandler,
-        )
+    )
     .lambda();
