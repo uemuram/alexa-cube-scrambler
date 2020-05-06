@@ -20,6 +20,28 @@ const LaunchRequestHandler = {
     }
 };
 
+const GenerateScrambleIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'GenerateScrambleIntent';
+    },
+    handle(handlerInput) {
+        try {
+            let scramble = cubeUtil.generate3x3x3Scramble(18);
+            console.log(scramble);
+            let speech = cubeUtil.scrambleStr2ssml(scramble);
+            console.log(speech);
+            return handlerInput.responseBuilder
+                .speak(speech)
+                .withSimpleCard("3x3x3 スクランブル", scramble)
+                //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+                .getResponse();
+        } catch (e) {
+            console.log(e);
+        }
+    }
+};
+
 const HelloWorldIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -33,7 +55,7 @@ const HelloWorldIntentHandler = {
             console.log(speech);
             return handlerInput.responseBuilder
                 .speak(speech)
-                .withSimpleCard(scramble)
+                .withSimpleCard("3x3x3 スクランブル", scramble)
                 //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
                 .getResponse();
         } catch (e) {
@@ -122,6 +144,7 @@ const ErrorHandler = {
 exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         LaunchRequestHandler,
+        GenerateScrambleIntentHandler,
         HelloWorldIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,

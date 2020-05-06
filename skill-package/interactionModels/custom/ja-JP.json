@@ -16,6 +16,16 @@
                     "samples": []
                 },
                 {
+                    "name": "GenerateScrambleIntent",
+                    "slots": [],
+                    "samples": [
+                        "スクランブルちょうだい",
+                        "スクランブル作って",
+                        "スクランブルして",
+                        "スクランブル"
+                    ]
+                },
+                {
                     "name": "HelloWorldIntent",
                     "slots": [],
                     "samples": [
