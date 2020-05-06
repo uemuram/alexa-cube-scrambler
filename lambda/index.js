@@ -19,6 +19,7 @@ const LaunchRequestHandler = {
             .getResponse();
     }
 };
+
 const HelloWorldIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
@@ -27,37 +28,28 @@ const HelloWorldIntentHandler = {
     handle(handlerInput) {
         //const speakOutput = 'Hello World!';
         const speakOutput = 'sss';
-        // return handlerInput.responseBuilder
-        //     .speak(speakOutput)
-        //     .withSimpleCard("B D' R2 D' R2 B2 L' F R' U R' B2 U L2 F2 D2 F2 B2 D' R2")
-        //     //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-        //     .getResponse();
-        // let response = handlerInput.responseBuilder
-        //     .speak(speakOutput)
-        //     .withSimpleCard("B D' R2 D' R2 B2 L' F R' U R' B2 U L2 F2 D2 F2 B2 D' R2")
-        //     //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
-        //     .getResponse();
 
         try {
             //        response.outputSpeech.ssml = '<speak>ぬるぽ</speak>'
             // TODO pauseを使って間隔調整するほうがいいのかも。
-            const speech = new Speech()
-                .prosody({ rate: "fast" }, "B Dダッシュ Rツー Dダッシュ")
-                .pause('1s')
-                .prosody({ rate: "medium" }, "B Dダッシュ Rツー Dダッシュ")
-                .pause('1s')
-                .prosody({ rate: "slow" }, "B Dダッシュ Rツー Dダッシュ")
-                .ssml();
+            // const speech = new Speech()
+            //     .prosody({ rate: "fast" }, "B Dダッシュ Rツー Dダッシュ")
+            //     .pause('1s')
+            //     .prosody({ rate: "medium" }, "B Dダッシュ Rツー Dダッシュ")
+            //     .pause('1s')
+            //     .prosody({ rate: "slow" }, "B Dダッシュ Rツー Dダッシュ")
+            //     .ssml();
+
+            let scramble = cubeUtil.generate3x3x3Scramble(18);
+            //let scramble = "R B R2 U B2 F U2 F R2 D' R' D U2 R2 D2 B U2 R2";
+            console.log(scramble);
+            let speech = cubeUtil.scrambleStr2ssml(scramble);
             console.log(speech);
-
-            // response.outputSpeech.ssml = speech;
-
             return handlerInput.responseBuilder
                 .speak(speech)
-                .withSimpleCard("B D' R2 D' R2 B2 L' F R' U R' B2 U L2 F2 D2 F2 B2 D' R2")
+                .withSimpleCard(scramble)
                 //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
                 .getResponse();
-
         } catch (e) {
             console.log(e);
         }
@@ -65,6 +57,9 @@ const HelloWorldIntentHandler = {
 
     }
 };
+
+
+
 const HelpIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
