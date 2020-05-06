@@ -4,6 +4,9 @@
 const Alexa = require('ask-sdk-core');
 const Speech = require('ssml-builder');
 
+const CubeUtil = require('CubeUtil');
+const cubeUtil = new CubeUtil();
+
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
@@ -36,8 +39,6 @@ const HelloWorldIntentHandler = {
         //     .getResponse();
 
         try {
-            console.log("x");
-
             //        response.outputSpeech.ssml = '<speak>ぬるぽ</speak>'
             // TODO pauseを使って間隔調整するほうがいいのかも。
             const speech = new Speech()
