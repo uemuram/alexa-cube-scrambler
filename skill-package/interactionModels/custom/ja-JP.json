@@ -17,12 +17,21 @@
                 },
                 {
                     "name": "GenerateScrambleIntent",
-                    "slots": [],
+                    "slots": [
+                        {
+                            "name" : "PuzzleType",
+                            "type" : "PUZZLE_TYPE"
+                        }
+                    ],
                     "samples": [
                         "スクランブルちょうだい",
                         "スクランブル作って",
                         "スクランブルして",
-                        "スクランブル"
+                        "スクランブル",
+                        " {PuzzleType} のスクランブル",
+                        " {PuzzleType} でスクランブル",
+                        " {PuzzleType} のスクランブル作って",
+                        " {PuzzleType} でスクランブル作って"
                     ]
                 },
                 {
@@ -43,7 +52,27 @@
                     "samples": []
                 }
             ],
-            "types": []
+            "types": [
+                {
+                    "name" : "PUZZLE_TYPE",
+                    "values" : [
+                        {
+                            "id": "2x2x2",
+                            "name":{
+                                "value": "二かける二かける二",
+                                "synonyms" : ["二かけ二かけ二","二かける二","二かけ二"]
+                            }
+                        },
+                        {
+                            "id": "3x3x3",
+                            "name":{
+                                "value": "三かける三かける三",
+                                "synonyms" : ["三かけ三かけ三","三かける三","三かけ三"]
+                            }
+                        }
+                    ]
+                }
+            ]
         }
     }
   }

@@ -15,8 +15,8 @@ class CubeUtil {
         return speech.ssml();
     }
 
-    // 3x3x3のスクランブルを生成
-    generate3x3x3Scramble(length) {
+    // スクランブル生成の基本関数
+    generateScrambleBase(length){
         const faces = ["U", "D", "R", "L", "F", "B"];
         const options = ["", "'", "2"];
         let scramble = "";
@@ -37,6 +37,16 @@ class CubeUtil {
             beforeFace = currentFace;
         }
         return scramble;
+    }
+
+    // 2x2x2のスクランブルを生成
+    generate2x2x2Scramble() {
+        return this.generateScrambleBase(11);
+    }
+
+    // 3x3x3のスクランブルを生成
+    generate3x3x3Scramble(length) {
+        return this.generateScrambleBase(18);
     }
 
     // n種類(0～n-1)の乱数を生成

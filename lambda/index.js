@@ -12,7 +12,7 @@ const LaunchRequestHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speakOutput = "ようこそ。";
+        const speakOutput = "スクランブルを生成する場合は「スクランブル作って」と言ってください。";
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .reprompt(speakOutput)
@@ -27,14 +27,40 @@ const GenerateScrambleIntentHandler = {
     },
     handle(handlerInput) {
         try {
-            let scramble = cubeUtil.generate3x3x3Scramble(18);
+
+            // パズルタイプを設定
+            // デフォルトは3x3x3
+            let puzzleType = '3x3x3';
+            // スロットから取得
+            let puzzleTypeSlot = handlerInput.requestEnvelope.request.intent.slots.PuzzleType.resolutions;
+            if (puzzleTypeSlot && puzzleTypeSlot.resolutionsPerAuthority[0].status.code === 'ER_SUCCESS_MATCH') {
+                // パズルタイプ取得に成功した場合のみ設定
+                puzzleType = puzzleTypeSlot.resolutionsPerAuthority[0].values[0].value.id;
+            }
+
+            console.log(puzzleType);
+            let scramble;
+            let cardTitle;
+            switch (puzzleType) {
+                case "2x2x2":
+                    scramble = cubeUtil.generate2x2x2Scramble();
+                    cardTitle = "2x2x2 スクランブル";
+                    break;
+                case "3x3x3":
+                    scramble = cubeUtil.generate3x3x3Scramble();
+                    cardTitle = "3x3x3 スクランブル";
+                    break;
+                default:
+                    break;
+            }
+
             console.log(scramble);
             let speech = cubeUtil.scrambleStr2ssml(scramble);
             console.log(speech);
             return handlerInput.responseBuilder
                 .speak(speech)
-                .withSimpleCard("3x3x3 スクランブル", scramble)
-                //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+                .withSimpleCard(cardTitle, scramble)
+                .reprompt('もう一度スクランブルを生成する場合は「次」と言ってください。')
                 .getResponse();
         } catch (e) {
             console.log(e);
