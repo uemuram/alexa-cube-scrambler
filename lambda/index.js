@@ -14,7 +14,7 @@ const LaunchRequestHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speakOutput = "スクランブルを生成する場合は「スクランブル作って」と言ってください。";
+        const speakOutput = "スクランブルを生成する場合は「スクランブル」と言ってください。";
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .reprompt(speakOutput)
@@ -53,17 +53,9 @@ const GenerateScrambleIntentHandler = {
                     // パズルタイプを認識できなかった場合は聞き返す
                     return handlerInput.responseBuilder
                         .speak('パズルの種類を確認できませんでした。もう一度お願いします。')
-                        .reprompt('スクランブルを生成する場合は「スクランブルして」と言ってください。')
+                        .reprompt('スクランブルを生成する場合は「スクランブル」と言ってください。')
                         .getResponse();
                 }
-            }
-            // 未対応パズルチェック
-            if (c.msg_notSupportedPuzzleType[puzzleType]) {
-                console.log("未対応パズル");
-                return handlerInput.responseBuilder
-                    .speak(c.msg_notSupportedPuzzleType[puzzleType])
-                    .reprompt('スクランブルを生成する場合は「スクランブルして」と言ってください。')
-                    .getResponse();
             }
             console.log(puzzleType);
 
@@ -79,7 +71,12 @@ const GenerateScrambleIntentHandler = {
                     cardTitle = "3x3x3 スクランブル";
                     break;
                 default:
-                    break;
+                    // 未対応パズル
+                    console.log("未対応パズル");
+                    return handlerInput.responseBuilder
+                        .speak(c.msg_notSupportedPuzzleType[puzzleType])
+                        .reprompt('スクランブルを生成する場合は「スクランブル」と言ってください。')
+                        .getResponse();
             }
 
             console.log(scramble);
