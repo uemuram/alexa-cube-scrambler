@@ -29,9 +29,14 @@ const GenerateScrambleIntentHandler = {
     },
     handle(handlerInput) {
         try {
+            // セッション準備
+            let attributes = handlerInput.attributesManager.getSessionAttributes();
+
             // パズルタイプを設定
-            // デフォルトは3x3x3
-            let puzzleType = '3x3x3';
+            let sessionPuzzleType = attributes.puzzleType;
+            // セッションからとれれば引継ぎ。とれなければデフォルト(3x3x3)
+            let puzzleType = sessionPuzzleType ? sessionPuzzleType : '3x3x3';
+
             // スロットから取得
             let puzzleTypeSlot = handlerInput.requestEnvelope.request.intent.slots.PuzzleType.resolutions;
             console.log(puzzleTypeSlot);
@@ -48,7 +53,7 @@ const GenerateScrambleIntentHandler = {
                     // パズルタイプを認識できなかった場合は聞き返す
                     return handlerInput.responseBuilder
                         .speak('パズルの種類を確認できませんでした。もう一度お願いします。')
-                        .reprompt('スクランブルを生成する場合は「スクランブル作って」と言ってください。')
+                        .reprompt('スクランブルを生成する場合は「スクランブルして」と言ってください。')
                         .getResponse();
                 }
             }
@@ -57,7 +62,7 @@ const GenerateScrambleIntentHandler = {
                 console.log("未対応パズル");
                 return handlerInput.responseBuilder
                     .speak(c.msg_notSupportedPuzzleType[puzzleType])
-                    .reprompt('スクランブルを生成する場合は「スクランブル作って」と言ってください。')
+                    .reprompt('スクランブルを生成する場合は「スクランブルして」と言ってください。')
                     .getResponse();
             }
             console.log(puzzleType);
@@ -80,6 +85,12 @@ const GenerateScrambleIntentHandler = {
             console.log(scramble);
             let speech = cubeUtil.scrambleStr2ssml(scramble);
             console.log(speech);
+
+            // 今の状態をセッションに保存
+            attributes.scramble = scramble;
+            attributes.puzzleType = puzzleType;
+            handlerInput.attributesManager.setSessionAttributes(attributes);
+
             return handlerInput.responseBuilder
                 .speak(speech)
                 .withSimpleCard(cardTitle, scramble)
