@@ -24,14 +24,15 @@
                         }
                     ],
                     "samples": [
-                        "スクランブルちょうだい",
                         "スクランブル作って",
                         "スクランブルして",
                         "スクランブル",
-                        " {PuzzleType} のスクランブル",
-                        " {PuzzleType} でスクランブル",
                         " {PuzzleType} のスクランブル作って",
-                        " {PuzzleType} でスクランブル作って"
+                        " {PuzzleType} でスクランブル作って",
+                        " {PuzzleType} のスクランブルして",
+                        " {PuzzleType} でスクランブルして",
+                        " {PuzzleType} のスクランブル",
+                        " {PuzzleType} でスクランブル"
                     ]
                 },
                 {
@@ -83,6 +84,36 @@
                             "name":{
                                 "value": "七かける七かける七",
                                 "synonyms" : ["七かけ七かけ七","七かける七","七かけ七"]
+                            }
+                        },
+                        {
+                            "id": "megaminx",
+                            "name":{
+                                "value": "メガミンクス"
+                            }
+                        },
+                        {
+                            "id": "pyraminx",
+                            "name":{
+                                "value": "ピラミンクス"
+                            }
+                        },
+                        {
+                            "id": "skewb",
+                            "name":{
+                                "value": "スキューブ"
+                            }
+                        },
+                        {
+                            "id": "square1",
+                            "name":{
+                                "value": "スクウェアワン"
+                            }
+                        },
+                        {
+                            "id": "clock",
+                            "name":{
+                                "value": "クロック"
                             }
                         }
                     ]
