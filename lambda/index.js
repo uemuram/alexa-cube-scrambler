@@ -32,12 +32,11 @@ const GenerateScrambleIntentHandler = {
             // セッション準備
             let attributes = handlerInput.attributesManager.getSessionAttributes();
 
-            // パズルタイプを設定
+            // パズルタイプの初期設定。セッションからとれれば引継ぎ。とれなければデフォルト(3x3x3)
             let sessionPuzzleType = attributes.puzzleType;
-            // セッションからとれれば引継ぎ。とれなければデフォルト(3x3x3)
             let puzzleType = sessionPuzzleType ? sessionPuzzleType : '3x3x3';
 
-            // スロットから取得
+            // スロットからパズルタイプを取得
             let puzzleTypeSlot = handlerInput.requestEnvelope.request.intent.slots.PuzzleType.resolutions;
             console.log(puzzleTypeSlot);
             // スロット値が取得できた場合は内容をチェック
@@ -59,33 +58,25 @@ const GenerateScrambleIntentHandler = {
             }
             console.log(puzzleType);
 
-            let scramble;
-            let cardTitle;
-            switch (puzzleType) {
-                case "2x2x2":
-                    scramble = cubeUtil.generate2x2x2Scramble();
-                    cardTitle = "2x2x2 スクランブル";
-                    break;
-                case "3x3x3":
-                    scramble = cubeUtil.generate3x3x3Scramble();
-                    cardTitle = "3x3x3 スクランブル";
-                    break;
-                default:
-                    // 未対応パズル
-                    console.log("未対応パズル");
-                    return handlerInput.responseBuilder
-                        .speak(c.msg_notSupportedPuzzleType[puzzleType])
-                        .reprompt('スクランブルを生成する場合は「スクランブル」と言ってください。')
-                        .getResponse();
+            // スクランブルを生成
+            let scrambleInfo = cubeUtil.generateScramble(puzzleType);
+            // 未対応パズルだった場合
+            if (!scrambleInfo) {
+                console.log("未対応パズル");
+                return handlerInput.responseBuilder
+                    .speak(c.msg_notSupportedPuzzleType[puzzleType])
+                    .reprompt('スクランブルを生成する場合は「スクランブル」と言ってください。')
+                    .getResponse();
             }
-
-            console.log(scramble);
-            let speech = cubeUtil.scrambleStr2ssml(scramble);
-            console.log(speech);
+            let scramble = scrambleInfo.scramble;
+            let cardTitle = scrambleInfo.cardTitle;
+            let speech = scrambleInfo.speech;
 
             // 今の状態をセッションに保存
-            attributes.scramble = scramble;
             attributes.puzzleType = puzzleType;
+            attributes.scramble = scramble;
+            attributes.cardTitle = cardTitle;
+            attributes.speech = speech;
             handlerInput.attributesManager.setSessionAttributes(attributes);
 
             return handlerInput.responseBuilder
@@ -93,6 +84,40 @@ const GenerateScrambleIntentHandler = {
                 .withSimpleCard(cardTitle, scramble)
                 .reprompt('もう一度スクランブルを生成する場合は「次」と言ってください。')
                 .getResponse();
+        } catch (e) {
+            console.log(e);
+        }
+    }
+};
+
+const RepeatScrambleIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'RepeatScrambleIntent';
+    },
+    handle(handlerInput) {
+        try {
+            // セッション準備
+            let attributes = handlerInput.attributesManager.getSessionAttributes();
+            // 記録されているスクランブルを取得
+            let scramble = attributes.scramble;
+            let cardTitle = attributes.cardTitle;
+            let speech = attributes.speech;
+
+            if (scramble && cardTitle && speech) {
+                // 前回のスクランブル情報がセッションから取れた場合
+                return handlerInput.responseBuilder
+                    .speak(speech)
+                    .withSimpleCard(cardTitle, scramble)
+                    .reprompt('もう一度スクランブルを生成する場合は「次」と言ってください。')
+                    .getResponse();
+            } else {
+                // 前回のスクランブル情報がセッションからとれなかった場合
+                return handlerInput.responseBuilder
+                    .speak("前回のスクランブル情報を取得できませんでした。")
+                    .reprompt('もう一度スクランブルを生成する場合は「次」と言ってください。')
+                    .getResponse();
+            }
         } catch (e) {
             console.log(e);
         }
@@ -180,6 +205,7 @@ exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         LaunchRequestHandler,
         GenerateScrambleIntentHandler,
+        RepeatScrambleIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,

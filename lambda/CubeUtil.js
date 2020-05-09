@@ -2,6 +2,27 @@ const Speech = require('ssml-builder');
 
 class CubeUtil {
 
+    // パズルタイプに応じたスクランブルを生成する
+    generateScramble(puzzleType){
+        let scrambleInfo = {};
+        switch (puzzleType) {
+            case "2x2x2":
+                scrambleInfo.scramble = this.generate2x2x2Scramble();
+                scrambleInfo.cardTitle = "2x2x2 スクランブル";
+                break;
+            case "3x3x3":
+                scrambleInfo.scramble = this.generate3x3x3Scramble();
+                scrambleInfo.cardTitle = "3x3x3 スクランブル";
+                break;
+            default:
+                // 未対応パズル
+                return null;
+        }
+        scrambleInfo.speech = this.scrambleStr2ssml(scrambleInfo.scramble);
+        console.log(scrambleInfo);
+        return scrambleInfo;
+    }
+
     // スクランブルの文字列をssmlに変換する
     scrambleStr2ssml(str) {
         let speechStr = str

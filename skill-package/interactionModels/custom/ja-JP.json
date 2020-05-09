@@ -36,6 +36,15 @@
                     ]
                 },
                 {
+                    "name": "RepeatScrambleIntent",
+                    "samples": [
+                        "もう一度",
+                        "もう一回",
+                        "もっかい",
+                        "リピート"
+                    ]
+                },
+                {
                     "name": "AMAZON.NavigateHomeIntent",
                     "samples": []
                 }
