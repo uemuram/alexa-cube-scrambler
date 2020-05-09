@@ -6,6 +6,8 @@ const Speech = require('ssml-builder');
 
 const CubeUtil = require('CubeUtil');
 const cubeUtil = new CubeUtil();
+const Const = require('Const');
+const c = new Const();
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
@@ -27,18 +29,39 @@ const GenerateScrambleIntentHandler = {
     },
     handle(handlerInput) {
         try {
-
             // パズルタイプを設定
             // デフォルトは3x3x3
             let puzzleType = '3x3x3';
             // スロットから取得
             let puzzleTypeSlot = handlerInput.requestEnvelope.request.intent.slots.PuzzleType.resolutions;
-            if (puzzleTypeSlot && puzzleTypeSlot.resolutionsPerAuthority[0].status.code === 'ER_SUCCESS_MATCH') {
-                // パズルタイプ取得に成功した場合のみ設定
-                puzzleType = puzzleTypeSlot.resolutionsPerAuthority[0].values[0].value.id;
+            console.log(puzzleTypeSlot);
+            // スロット値が取得できた場合は内容をチェック
+            if (puzzleTypeSlot) {
+                let statusCode = puzzleTypeSlot.resolutionsPerAuthority[0].status.code;
+                console.log(statusCode);
+                if (statusCode === 'ER_SUCCESS_MATCH') {
+                    console.log("パズルタイプ取得成功");
+                    // パズルタイプ取得に成功した場合のみ設定
+                    puzzleType = puzzleTypeSlot.resolutionsPerAuthority[0].values[0].value.id;
+                } else {
+                    console.log("パズルタイプ取得失敗");
+                    // パズルタイプを認識できなかった場合は聞き返す
+                    return handlerInput.responseBuilder
+                        .speak('パズルの種類を確認できませんでした。もう一度お願いします。')
+                        .reprompt('スクランブルを生成する場合は「スクランブル作って」と言ってください。')
+                        .getResponse();
+                }
             }
-
+            // 未対応パズルチェック
+            if (c.msg_notSupportedPuzzleType[puzzleType]) {
+                console.log("未対応パズル");
+                return handlerInput.responseBuilder
+                    .speak(c.msg_notSupportedPuzzleType[puzzleType])
+                    .reprompt('スクランブルを生成する場合は「スクランブル作って」と言ってください。')
+                    .getResponse();
+            }
             console.log(puzzleType);
+
             let scramble;
             let cardTitle;
             switch (puzzleType) {
@@ -61,28 +84,6 @@ const GenerateScrambleIntentHandler = {
                 .speak(speech)
                 .withSimpleCard(cardTitle, scramble)
                 .reprompt('もう一度スクランブルを生成する場合は「次」と言ってください。')
-                .getResponse();
-        } catch (e) {
-            console.log(e);
-        }
-    }
-};
-
-const HelloWorldIntentHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'HelloWorldIntent';
-    },
-    handle(handlerInput) {
-        try {
-            let scramble = cubeUtil.generate3x3x3Scramble(18);
-            console.log(scramble);
-            let speech = cubeUtil.scrambleStr2ssml(scramble);
-            console.log(speech);
-            return handlerInput.responseBuilder
-                .speak(speech)
-                .withSimpleCard("3x3x3 スクランブル", scramble)
-                //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
                 .getResponse();
         } catch (e) {
             console.log(e);
@@ -171,7 +172,6 @@ exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         LaunchRequestHandler,
         GenerateScrambleIntentHandler,
-        HelloWorldIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,

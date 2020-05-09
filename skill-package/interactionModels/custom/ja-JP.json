@@ -35,19 +35,6 @@
                     ]
                 },
                 {
-                    "name": "HelloWorldIntent",
-                    "slots": [],
-                    "samples": [
-                        "hello",
-                        "how are you",
-                        "say hi world",
-                        "say hi",
-                        "hi",
-                        "say hello world",
-                        "say hello"
-                    ]
-                },
-                {
                     "name": "AMAZON.NavigateHomeIntent",
                     "samples": []
                 }
@@ -68,6 +55,34 @@
                             "name":{
                                 "value": "三かける三かける三",
                                 "synonyms" : ["三かけ三かけ三","三かける三","三かけ三"]
+                            }
+                        },
+                        {
+                            "id": "4x4x4",
+                            "name":{
+                                "value": "四かける四かける四",
+                                "synonyms" : ["四かけ四かけ四","四かける四","四かけ四"]
+                            }
+                        },
+                        {
+                            "id": "5x5x5",
+                            "name":{
+                                "value": "五かける五かける五",
+                                "synonyms" : ["五かけ五かけ五","五かける五","五かけ五"]
+                            }
+                        },
+                        {
+                            "id": "6x6x6",
+                            "name":{
+                                "value": "六かける六かける六",
+                                "synonyms" : ["六かけ六かけ六","六かける六","六かけ六"]
+                            }
+                        },
+                        {
+                            "id": "7x7x7",
+                            "name":{
+                                "value": "七かける七かける七",
+                                "synonyms" : ["七かけ七かけ七","七かける七","七かけ七"]
                             }
                         }
                     ]
