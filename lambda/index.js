@@ -16,8 +16,11 @@ const LaunchRequestHandler = {
     handle(handlerInput) {
         const speakOutput = "ようこそ。スクランブルを作る場合は「スクランブル」と言ってください。";
         const reprompt = "スクランブルを作る場合は「スクランブル」と言ってください。細かい使い方、設定変更方法を確認する場合は「ヘルプ」と言ってください。";
+
+        const cardTxt = "";
         return handlerInput.responseBuilder
             .speak(speakOutput)
+            .withSimpleCard('キューブスクランブラ', cardTxt)
             .reprompt(reprompt)
             .getResponse();
     }
@@ -141,7 +144,6 @@ const SetReadingSpeedIntentHandler = {
     },
     handle(handlerInput) {
         try {
-
             // スロットから読み上げ速度を取得
             let readingSpeedSlot = handlerInput.requestEnvelope.request.intent.slots.ReadingSpeed.resolutions;
             console.log(readingSpeedSlot);
