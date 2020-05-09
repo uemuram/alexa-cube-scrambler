@@ -37,6 +37,10 @@ const GenerateScrambleIntentHandler = {
             let sessionPuzzleType = attributes.puzzleType;
             let puzzleType = sessionPuzzleType ? sessionPuzzleType : '3x3x3';
 
+            // 読み上げ速度の設定。セッションからとれれば引継ぎ、とれなければデフォルト(medium)
+            let sessionReadingSpeed = attributes.readingSpeed;
+            let readingSpeed = sessionReadingSpeed ? sessionReadingSpeed : 'medium';
+
             // スロットからパズルタイプを取得
             let puzzleTypeSlot = handlerInput.requestEnvelope.request.intent.slots.PuzzleType.resolutions;
             console.log(puzzleTypeSlot);
@@ -71,13 +75,14 @@ const GenerateScrambleIntentHandler = {
             }
             let scramble = scrambleInfo.scramble;
             let cardTitle = scrambleInfo.cardTitle;
-            let speech = scrambleInfo.speech;
+
+            // 読み上げを生成
+            let speech = cubeUtil.scrambleStr2ssml(scramble, readingSpeed);
 
             // 今の状態をセッションに保存
             attributes.puzzleType = puzzleType;
             attributes.scramble = scramble;
             attributes.cardTitle = cardTitle;
-            attributes.speech = speech;
             handlerInput.attributesManager.setSessionAttributes(attributes);
 
             return handlerInput.responseBuilder
@@ -103,9 +108,13 @@ const RepeatScrambleIntentHandler = {
             // 記録されているスクランブルを取得
             let scramble = attributes.scramble;
             let cardTitle = attributes.cardTitle;
-            let speech = attributes.speech;
 
-            if (scramble && cardTitle && speech) {
+            // 読み上げ速度の設定。セッションからとれれば引継ぎ、とれなければデフォルト(medium)
+            let sessionReadingSpeed = attributes.readingSpeed;
+            let readingSpeed = sessionReadingSpeed ? sessionReadingSpeed : 'medium';
+
+            if (scramble && cardTitle) {
+                let speech = cubeUtil.scrambleStr2ssml(scramble, readingSpeed);
                 // 前回のスクランブル情報がセッションから取れた場合
                 return handlerInput.responseBuilder
                     .speak(speech)
@@ -119,6 +128,60 @@ const RepeatScrambleIntentHandler = {
                     .reprompt(c.MSG_notGenerateScrambleYet)
                     .getResponse();
             }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+};
+
+const SetReadingSpeedIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'SetReadingSpeedIntent';
+    },
+    handle(handlerInput) {
+        try {
+
+            // スロットから読み上げ速度を取得
+            let readingSpeedSlot = handlerInput.requestEnvelope.request.intent.slots.ReadingSpeed.resolutions;
+            console.log(readingSpeedSlot);
+            let readingSpeed;
+            // スロット値が取得できた場合は内容をチェック
+            if (readingSpeedSlot) {
+                let statusCode = readingSpeedSlot.resolutionsPerAuthority[0].status.code;
+                console.log(statusCode);
+                if (statusCode === 'ER_SUCCESS_MATCH') {
+                    console.log("読み取り速度取得成功");
+                    readingSpeed = readingSpeedSlot.resolutionsPerAuthority[0].values[0].value.id;
+                } else {
+                    console.log("読み取り速度取得失敗1");
+                    return handlerInput.responseBuilder
+                        .speak('読み取り速度を認識できませんでした。もう一度お願いします。')
+                        .reprompt(c.MSG_notGenerateScrambleYet)
+                        .getResponse();
+                }
+            } else {
+                console.log("読み取り速度取得失敗2");
+                return handlerInput.responseBuilder
+                    .speak('読み取り速度を認識できませんでした。もう一度お願いします。')
+                    .reprompt(c.MSG_notGenerateScrambleYet)
+                    .getResponse();
+            }
+
+            // 今の状態をセッションに保存
+            let attributes = handlerInput.attributesManager.getSessionAttributes();
+            attributes.readingSpeed = readingSpeed;
+            handlerInput.attributesManager.setSessionAttributes(attributes);
+
+            let speedStr = {
+                "fast" : "速い",
+                "medium" : "普通",
+                "slow" : "ゆっくり",
+            }[readingSpeed];
+            return handlerInput.responseBuilder
+                .speak('読み上げ速度を' + speedStr + 'に設定しました。')
+                .reprompt(c.MSG_notGenerateScrambleYet)
+                .getResponse();
         } catch (e) {
             console.log(e);
         }
@@ -207,6 +270,7 @@ exports.handler = Alexa.SkillBuilders.custom()
         LaunchRequestHandler,
         GenerateScrambleIntentHandler,
         RepeatScrambleIntentHandler,
+        SetReadingSpeedIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,

@@ -3,7 +3,7 @@ const Speech = require('ssml-builder');
 class CubeUtil {
 
     // パズルタイプに応じたスクランブルを生成する
-    generateScramble(puzzleType){
+    generateScramble(puzzleType) {
         let scrambleInfo = {};
         switch (puzzleType) {
             case "2x2x2":
@@ -18,13 +18,12 @@ class CubeUtil {
                 // 未対応パズル
                 return null;
         }
-        scrambleInfo.speech = this.scrambleStr2ssml(scrambleInfo.scramble);
         console.log(scrambleInfo);
         return scrambleInfo;
     }
 
     // スクランブルの文字列をssmlに変換する
-    scrambleStr2ssml(str) {
+    scrambleStr2ssml(str, readingSpeed) {
         let speechStr = str
             .replace(/F/g, "エフ")
             .replace(/D/g, "デー")
@@ -32,12 +31,12 @@ class CubeUtil {
             .replace(/'/g, "ダッシュ")
             .replace(/ /g, ",");
         let speech = new Speech()
-            .prosody({ rate: "medium" }, speechStr);
+            .prosody({ rate: readingSpeed }, speechStr);
         return speech.ssml();
     }
 
     // スクランブル生成の基本関数
-    generateScrambleBase(length){
+    generateScrambleBase(length) {
         const faces = ["U", "D", "R", "L", "F", "B"];
         const options = ["", "'", "2"];
         let scramble = "";

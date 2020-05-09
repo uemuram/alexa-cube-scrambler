@@ -45,6 +45,19 @@
                     ]
                 },
                 {
+                    "name": "SetReadingSpeedIntent",
+                    "slots": [
+                        {
+                            "name" : "ReadingSpeed",
+                            "type" : "READING_SPEED"
+                        }
+                    ],
+                    "samples": [
+                        " {ReadingSpeed} 読んで",
+                        "読み上げを {ReadingSpeed} して"
+                    ]
+                },
+                {
                     "name": "AMAZON.NavigateHomeIntent",
                     "samples": []
                 }
@@ -123,6 +136,30 @@
                             "id": "clock",
                             "name":{
                                 "value": "クロック"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name" : "READING_SPEED",
+                    "values" : [
+                        {
+                            "id": "fast",
+                            "name":{
+                                "value": "速く"
+                            }
+                        },
+                        {
+                            "id": "medium",
+                            "name":{
+                                "value": "普通に"
+                            }
+                        },
+                        {
+                            "id": "slow",
+                            "name":{
+                                "value": "ゆっくり",
+                                "synonyms" : ["遅く","ゆっくりに"]
                             }
                         }
                     ]
