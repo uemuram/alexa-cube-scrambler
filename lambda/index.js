@@ -14,10 +14,11 @@ const LaunchRequestHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speakOutput = "スクランブルを生成する場合は「スクランブル」と言ってください。";
+        const speakOutput = "ようこそ。スクランブルを作る場合は「スクランブル」と言ってください。";
+        const reprompt = "スクランブルを作る場合は「スクランブル」と言ってください。細かい使い方、設定変更方法を確認する場合は「ヘルプ」と言ってください。";
         return handlerInput.responseBuilder
             .speak(speakOutput)
-            .reprompt(speakOutput)
+            .reprompt(reprompt)
             .getResponse();
     }
 };
@@ -52,7 +53,7 @@ const GenerateScrambleIntentHandler = {
                     // パズルタイプを認識できなかった場合は聞き返す
                     return handlerInput.responseBuilder
                         .speak('パズルの種類を確認できませんでした。もう一度お願いします。')
-                        .reprompt('スクランブルを生成する場合は「スクランブル」と言ってください。')
+                        .reprompt(c.MSG_notGenerateScrambleYet)
                         .getResponse();
                 }
             }
@@ -64,8 +65,8 @@ const GenerateScrambleIntentHandler = {
             if (!scrambleInfo) {
                 console.log("未対応パズル");
                 return handlerInput.responseBuilder
-                    .speak(c.msg_notSupportedPuzzleType[puzzleType])
-                    .reprompt('スクランブルを生成する場合は「スクランブル」と言ってください。')
+                    .speak(c.MSG_notSupportedPuzzleType[puzzleType])
+                    .reprompt(c.MSG_notGenerateScrambleYet)
                     .getResponse();
             }
             let scramble = scrambleInfo.scramble;
@@ -82,7 +83,7 @@ const GenerateScrambleIntentHandler = {
             return handlerInput.responseBuilder
                 .speak(speech)
                 .withSimpleCard(cardTitle, scramble)
-                .reprompt('もう一度スクランブルを生成する場合は「次」と言ってください。')
+                .reprompt(c.MSG_afterGenerateScramble)
                 .getResponse();
         } catch (e) {
             console.log(e);
@@ -109,13 +110,13 @@ const RepeatScrambleIntentHandler = {
                 return handlerInput.responseBuilder
                     .speak(speech)
                     .withSimpleCard(cardTitle, scramble)
-                    .reprompt('もう一度スクランブルを生成する場合は「次」と言ってください。')
+                    .reprompt(c.MSG_afterGenerateScramble)
                     .getResponse();
             } else {
                 // 前回のスクランブル情報がセッションからとれなかった場合
                 return handlerInput.responseBuilder
                     .speak("前回のスクランブル情報を取得できませんでした。")
-                    .reprompt('もう一度スクランブルを生成する場合は「次」と言ってください。')
+                    .reprompt(c.MSG_notGenerateScrambleYet)
                     .getResponse();
             }
         } catch (e) {
@@ -130,11 +131,11 @@ const HelpIntentHandler = {
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.HelpIntent';
     },
     handle(handlerInput) {
-        const speakOutput = 'You can say hello to me! How can I help?';
+        const speakOutput = c.MSG_help;
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
-            .reprompt(speakOutput)
+            .reprompt(c.MSG_notGenerateScrambleYet)
             .getResponse();
     }
 };
@@ -145,7 +146,7 @@ const CancelAndStopIntentHandler = {
                 || Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.StopIntent');
     },
     handle(handlerInput) {
-        const speakOutput = 'Goodbye!';
+        const speakOutput = 'スキルを終了します。';
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .getResponse();
@@ -189,7 +190,7 @@ const ErrorHandler = {
     },
     handle(handlerInput, error) {
         console.log(`~~~~ Error handled: ${error.stack}`);
-        const speakOutput = `Sorry, I had trouble doing what you asked. Please try again.`;
+        const speakOutput = `エラーが発生しました。もう一度お試しください。`;
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
