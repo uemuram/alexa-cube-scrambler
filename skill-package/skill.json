@@ -3,20 +3,22 @@
     "publishingInformation": {
       "locales": {
         "ja-JP": {
-          "summary": "Sample Short Description",
+          "summary": "スピードキューブなどの立体パズルを混ぜる手順(スクランブル)をランダムに生成し、読み上げます。",
           "examplePhrases": [
-            "Alexa open hello world",
-            "hello",
-            "help"
+            "アレクサ、まぜキューブを開いて",
+            "アレクサ、まぜキューブで混ぜて",
+            "3かける3で混ぜて"
           ],
           "name": "まぜキューブ",
-          "description": "Sample Full Description"
+          "description": "スピードキューブなどの立体パズルを混ぜる手順(スクランブル)をランダムに生成し、読み上げるスキルです。\n手元のキューブをちょっと混ぜたいときに使ってみてください。\n\n\n・スキルを起動する\n「アレクサ、まぜキューブを開いて」でスキルを開始します。\nまた、「アレクサ、まぜキューブで混ぜて」のように呼びかけるとスキルの開始とスクランブルの読み上げを同時に行います。\n\n・スクランブルを作る\n「混ぜて」「スクランブルして」と呼びかけるとランダムなスクランブルを読み上げます。\n読み上げの後に「もう一度」と呼びかけると、同じスクランブルを再度読み上げます。\n\n・パズルを指定する\n「3かける3で混ぜて」「2かける2で混ぜて」のようにパズルを指定すると、指定されたパズル用のスクランブルを読み上げます。\n\n・読み上げ速度を変更する\n「速く読んで」「普通に読んで」「ゆっくり読んで」のように呼び掛けると読み上げの速度を変更します。\n\n\n※スクランブルは回転記号で表現されます。回転記号について調べるには「回転記号 キューブ」などのキーワードでGoogle検索してください。\n※BとDをはっきり区別するため、Bは「ビー」、Dは「デー」と発音します。"
         }
       },
-      "isAvailableWorldwide": true,
-      "testingInstructions": "Sample Testing Instructions.",
-      "category": "KNOWLEDGE_AND_TRIVIA",
-      "distributionCountries": []
+      "isAvailableWorldwide": false,
+      "distributionMode": "PUBLIC",
+      "category": "GAME_INFO_AND_ACCESSORY",
+      "distributionCountries": [
+        "JP"
+      ]
     },
     "apis": {
       "custom": {
