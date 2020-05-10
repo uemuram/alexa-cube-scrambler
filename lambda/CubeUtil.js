@@ -24,6 +24,12 @@ class CubeUtil {
 
     // スクランブルの文字列をssmlに変換する
     scrambleStr2ssml(str, readingSpeed) {
+        let rate = {
+            "fast": "fast",
+            "medium": "medium",
+            "slow": "x-slow"
+        }[readingSpeed];
+
         let speechStr = str
             .replace(/F/g, "エフ")
             .replace(/D/g, "デー")
@@ -31,7 +37,7 @@ class CubeUtil {
             .replace(/'/g, "ダッシュ")
             .replace(/ /g, ",");
         let speech = new Speech()
-            .prosody({ rate: readingSpeed }, speechStr);
+            .prosody({ rate: rate }, speechStr);
         return speech.ssml();
     }
 

@@ -168,7 +168,7 @@
                             }
                         },
                         {
-                            "id": "x-slow",
+                            "id": "slow",
                             "name":{
                                 "value": "ゆっくり",
                                 "synonyms" : ["遅く","ゆっくりに"]

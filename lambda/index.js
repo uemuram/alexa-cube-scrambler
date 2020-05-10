@@ -176,7 +176,7 @@ const SetReadingSpeedIntentHandler = {
             let speedStr = {
                 "fast": "速い",
                 "medium": "普通",
-                "x-slow": "ゆっくり",
+                "slow": "ゆっくり",
             }[readingSpeed];
             return handlerInput.responseBuilder
                 .speak('読み上げ速度を' + speedStr + 'に設定しました。')
