@@ -6,6 +6,7 @@ class Const {
         this.MSG_launchReprompt = "スクランブルを作るには「混ぜて」と言ってください。細かい使い方を確認するには「ヘルプ」と言ってください。";
         this.MSG_afterGenerateScramble = "新しいスクランブルを作るには「混ぜて」と言ってください。";
         this.MSG_notGenerateScrambleYet = "スクランブルを作るには「混ぜて」と言ってください。";
+        this.MSG_fallBack = "コマンドを正しく認識できませんでした。使い方を確認するには「ヘルプ」と言ってください。";
 
         this.MSG_help =　"" 
             + "このスキルでは、立体パズルを混ぜる手順である「スクランブル」を読み上げます。"
