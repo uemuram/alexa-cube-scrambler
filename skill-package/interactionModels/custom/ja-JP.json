@@ -16,6 +16,10 @@
                     "samples": []
                 },
                 {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
                     "name": "GenerateScrambleIntent",
                     "slots": [
                         {
@@ -24,10 +28,14 @@
                         }
                     ],
                     "samples": [
+                        "混ぜて",
                         "スクランブル作って",
                         "スクランブルして",
                         "スクランブル",
                         " {PuzzleType} ",
+                        " {PuzzleType} 混ぜて",
+                        " {PuzzleType} で混ぜて",
+                        " {PuzzleType} を混ぜて",
                         " {PuzzleType} のスクランブル作って",
                         " {PuzzleType} でスクランブル作って",
                         " {PuzzleType} のスクランブルして",
@@ -160,7 +168,7 @@
                             }
                         },
                         {
-                            "id": "slow",
+                            "id": "x-slow",
                             "name":{
                                 "value": "ゆっくり",
                                 "synonyms" : ["遅く","ゆっくりに"]

@@ -14,8 +14,8 @@ const LaunchRequestHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speakOutput = "ようこそ。スクランブルを作る場合は「スクランブル」と言ってください。";
-        const reprompt = "スクランブルを作る場合は「スクランブル」と言ってください。細かい使い方、設定変更方法を確認する場合は「ヘルプ」と言ってください。";
+        const speakOutput = c.MSG_launch;
+        const reprompt = c.MSG_launchReprompt;
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
@@ -176,7 +176,7 @@ const SetReadingSpeedIntentHandler = {
             let speedStr = {
                 "fast": "速い",
                 "medium": "普通",
-                "slow": "ゆっくり",
+                "x-slow": "ゆっくり",
             }[readingSpeed];
             return handlerInput.responseBuilder
                 .speak('読み上げ速度を' + speedStr + 'に設定しました。')
@@ -212,6 +212,20 @@ const CancelAndStopIntentHandler = {
         const speakOutput = 'スキルを終了します。';
         return handlerInput.responseBuilder
             .speak(speakOutput)
+            .getResponse();
+    }
+};
+const FallbackIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.FallbackIntent';
+    },
+    handle(handlerInput) {
+        const speakOutput = c.MSG_help;
+
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .reprompt(c.MSG_notGenerateScrambleYet)
             .getResponse();
     }
 };
@@ -273,6 +287,7 @@ exports.handler = Alexa.SkillBuilders.custom()
         SetReadingSpeedIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
+        FallbackIntentHandler,
         SessionEndedRequestHandler,
         IntentReflectorHandler, // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
     )
