@@ -17,10 +17,8 @@ const LaunchRequestHandler = {
         const speakOutput = "ようこそ。スクランブルを作る場合は「スクランブル」と言ってください。";
         const reprompt = "スクランブルを作る場合は「スクランブル」と言ってください。細かい使い方、設定変更方法を確認する場合は「ヘルプ」と言ってください。";
 
-        const cardTxt = "";
         return handlerInput.responseBuilder
             .speak(speakOutput)
-            .withSimpleCard('キューブスクランブラ', cardTxt)
             .reprompt(reprompt)
             .getResponse();
     }
@@ -176,9 +174,9 @@ const SetReadingSpeedIntentHandler = {
             handlerInput.attributesManager.setSessionAttributes(attributes);
 
             let speedStr = {
-                "fast" : "速い",
-                "medium" : "普通",
-                "slow" : "ゆっくり",
+                "fast": "速い",
+                "medium": "普通",
+                "slow": "ゆっくり",
             }[readingSpeed];
             return handlerInput.responseBuilder
                 .speak('読み上げ速度を' + speedStr + 'に設定しました。')

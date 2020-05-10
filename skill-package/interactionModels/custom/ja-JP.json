@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "キューブスクランブラ",
+            "invocationName": "まぜキューブ",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -27,6 +27,7 @@
                         "スクランブル作って",
                         "スクランブルして",
                         "スクランブル",
+                        " {PuzzleType} ",
                         " {PuzzleType} のスクランブル作って",
                         " {PuzzleType} でスクランブル作って",
                         " {PuzzleType} のスクランブルして",
