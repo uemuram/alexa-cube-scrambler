@@ -15,6 +15,7 @@
       },
       "isAvailableWorldwide": false,
       "distributionMode": "PUBLIC",
+      "testingInstructions": "Alexa対応デバイス以外に必要なものはありません。フレーズ例にしたがって発話するだけでテストできます。",
       "category": "GAME_INFO_AND_ACCESSORY",
       "distributionCountries": [
         "JP"
