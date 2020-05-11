@@ -78,7 +78,7 @@ const GenerateScrambleIntentHandler = {
             let cardTitle = scrambleInfo.cardTitle;
 
             // 読み上げを生成
-            let speech = cubeUtil.scrambleStr2ssml(scramble, readingSpeed);
+            let speech = cubeUtil.scrambleStr2ssml(scramble, readingSpeed, c.MSG_afterGenerateScramble);
 
             // 今の状態をセッションに保存
             attributes.puzzleType = puzzleType;
@@ -89,7 +89,7 @@ const GenerateScrambleIntentHandler = {
             return handlerInput.responseBuilder
                 .speak(speech)
                 .withSimpleCard(cardTitle, scramble)
-                .reprompt(c.MSG_afterGenerateScramble)
+                .reprompt(c.MSG_afterGenerateScrambleReprompt)
                 .getResponse();
         } catch (e) {
             console.log(e);
@@ -115,12 +115,12 @@ const RepeatScrambleIntentHandler = {
             let readingSpeed = sessionReadingSpeed ? sessionReadingSpeed : 'medium';
 
             if (scramble && cardTitle) {
-                let speech = cubeUtil.scrambleStr2ssml(scramble, readingSpeed);
                 // 前回のスクランブル情報がセッションから取れた場合
+                let speech = cubeUtil.scrambleStr2ssml(scramble, readingSpeed, c.MSG_afterGenerateScramble);
                 return handlerInput.responseBuilder
                     .speak(speech)
                     .withSimpleCard(cardTitle, scramble)
-                    .reprompt(c.MSG_afterGenerateScramble)
+                    .reprompt(c.MSG_afterGenerateScrambleReprompt)
                     .getResponse();
             } else {
                 // 前回のスクランブル情報がセッションからとれなかった場合
@@ -151,19 +151,19 @@ const SetReadingSpeedIntentHandler = {
                 let statusCode = readingSpeedSlot.resolutionsPerAuthority[0].status.code;
                 console.log(statusCode);
                 if (statusCode === 'ER_SUCCESS_MATCH') {
-                    console.log("読み取り速度取得成功");
+                    console.log("読み上げ速度取得成功");
                     readingSpeed = readingSpeedSlot.resolutionsPerAuthority[0].values[0].value.id;
                 } else {
-                    console.log("読み取り速度取得失敗1");
+                    console.log("読み上げ速度取得失敗1");
                     return handlerInput.responseBuilder
-                        .speak('読み取り速度を認識できませんでした。もう一度お願いします。')
+                        .speak(c.MSG_setReadingSpeedFail)
                         .reprompt(c.MSG_notGenerateScrambleYet)
                         .getResponse();
                 }
             } else {
-                console.log("読み取り速度取得失敗2");
+                console.log("読み上げ速度取得失敗2");
                 return handlerInput.responseBuilder
-                    .speak('読み取り速度を認識できませんでした。もう一度お願いします。')
+                    .speak(c.MSG_setReadingSpeedFail)
                     .reprompt(c.MSG_notGenerateScrambleYet)
                     .getResponse();
             }
@@ -179,7 +179,7 @@ const SetReadingSpeedIntentHandler = {
                 "slow": "ゆっくり",
             }[readingSpeed];
             return handlerInput.responseBuilder
-                .speak('読み上げ速度を' + speedStr + 'に設定しました。')
+                .speak('読み上げ速度を' + speedStr + 'に設定しました。続いてスクランブルを作るには「混ぜて」と言ってください。')
                 .reprompt(c.MSG_notGenerateScrambleYet)
                 .getResponse();
         } catch (e) {
