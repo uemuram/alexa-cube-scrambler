@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "まぜキューブ",
+            "invocationName": "キューブ支援",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
